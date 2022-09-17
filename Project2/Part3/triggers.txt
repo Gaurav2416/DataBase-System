@@ -1,0 +1,21 @@
+CREATE TRIGGER check_book_issue BEFORE UPDATE ON BOOKISSUED 		
+	FOR EACH ROW 		
+	BEGIN 		
+		IF ((:NEW.ISSUEDATE+21) < CURRENT_DATE()) THEN 	
+			 :NEW.NOTICEDATE := SYSDATE;
+		ELSE
+        IF ((:NEW.ISSUEDATE+21) > CURRENT_DATE()) THEN 	
+			 :NEW.NOTICEDATE := NULL; 
+		END IF; 
+   End IF;    
+	END;
+
+ CREATE TRIGGER renew_membership BEFORE UPDATE ON MEMBER 			
+	FOR EACH ROW 		
+	BEGIN 		
+		IF (:new.ENDDATE < CURRENT_DATE()) THEN 	
+			--you can set parameter to inform member that it's expired
+			--set some attributes to NULL
+            :new.GENERATIONDATE:= NULL;
+    END IF;    
+END;
